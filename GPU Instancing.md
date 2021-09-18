@@ -1,11 +1,18 @@
-渲染大量的物体，会产生大量draw call（主要是每个的SetShaderPass的开销）如果这些物体的mesh相同，则应该考虑使用GPU Instancing
+渲染大量的物体，会产生大量draw call（主要是每个的SetShaderPass的开销）如果这些物体的mesh和material相同，则应该考虑使用GPU Instancing
 
 GPU Instancing通过一次为具有相同网格的多个对象发出单个绘制调用来工作。CPU 收集所有每个对象的Transform（默认就支持）和材质属性（需要在shader中编写代码以支持），并将它们放入发送到 GPU 的数组中。然后 GPU 遍历所有条目并按照提供的顺序呈现它们。此外只要该数组没有变化（Transform、材质属性发生变化），那么只需要创建一次该数组的开销，如果发生变化，则每次变化都有一次开销（一般情况下是正优化）。
 
 ### 如何开启
 
--   一般物体：使用支持了GPU Instancing的shader（如Standard shader），或者自定义支持GPU Instancing的shader
--   动态创建的mesh：使用调用[Graphics.DrawMeshInstanced](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)和[Graphics.DrawMeshInstancedIndirect](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)从脚本执行 GPU 实例化
+使用相同的mesh和material，对于
+
+-   一般物体：需要material使用支持了GPU Instancing的shader（如Standard shader），或者自定义支持GPU Instancing的shader
+-   动态绘制物体的mesh：使用调用[Graphics.DrawMeshInstanced](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)和[Graphics.DrawMeshInstancedIndirect](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)从脚本执行 GPU 实例化
+
+#### 支持实例化的属性
+
+-   物体的Transform属性：默认支持
+-   Material属性（Properties暴露出来的变量）：需要在shader中编写代码以支持，且需要MaterialPropertyBlock组件来修改想要支持实例化的Material属性
 
 #### 自定义支持GPU Instancing的shader
 
@@ -46,8 +53,6 @@ Shader "SimplestInstancedShader"
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            // 每个 per-instance property 都必须在一个特别命名的instancing constant buffer中定义。使用这对宏来包装每个实例之间可不同的属性，而不是直接声明这些属性
-            // UNITY_INSTANCING_BUFFER_START(arrayName) 和 UNITY_INSTANCING_BUFFER_END(arrayName)的arrayName 对应 UNITY_ACCESS_INSTANCED_PROP(arrayName, instancedProperty) 的 arrayName
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
             UNITY_INSTANCING_BUFFER_END(Props)
@@ -85,13 +90,13 @@ Shader "SimplestInstancedShader"
 | `UNITY_TRANSFER_INSTANCE_ID(v, o);`                          | 使用它可以将实例 ID 从输入结构复制到顶点着色器中的输出结构。仅当您需要访问片段着色器中的每个实例数据时才需要这样做。 | `#define UNITY_TRANSFER_INSTANCE_ID(input, output)   output.instanceID = UNITY_GET_INSTANCE_ID(input)` |
 | `UNITY_ACCESS_INSTANCED_PROP(arrayName, var)`                | 使用它来访问在实例化常量缓冲区中声明的每个实例的 Shader 属性。它使用实例 ID 索引到实例数据数组中。该`arrayName`宏必须在一个匹配`UNITY_INSTANCING_BUFFER_END(name)`宏。 | `#define UNITY_ACCESS_INSTANCED_PROP(arr, var)   arr##Array[unity_InstanceID].var` |
 
-### 与静态合批的区别
-
 
 
 ### 其他说明
 
 -   使用多个实例属性时，您无需将所有属性都填写在`MaterialPropertyBlocks`
+-   应用优先级：SRP Batcher > Static Batch > GPU Instancing > Dynamic Batch
+-   不支持Skin Mesh Renderer
 
 ### 参考
 
