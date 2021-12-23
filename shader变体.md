@@ -1,6 +1,23 @@
-  ### 预编译指令
+### shader变体
 
-  #### keyword 关键字
+#### 优化
+
+-   构建时剥离
+-   着色器变体集合
+    -   添加到ProjectSettings->Graphics->Preloaded Shaders
+        Preloaded Shaders 列表列出的是常用着色器。此处列出的着色器变体将在应用程序的整个生命周期内加载到内存中。对于包含大量变体的 ShaderVariantCollections 资源，这可能会占用大量内存。为避免这种情况，应以较小的粒度创建 ShaderVariantCollection 资源并从脚本进行加载。
+    -   （按场景需求）手动加载
+        为每个场景记录使用过的着色器变体，将它们保存到单独的 ShaderVariantCollections 资源中，并在场景启动时加载它们。
+
+https://docs.unity3d.com/cn/2019.4/Manual/OptimizingShaderLoadTime.html
+
+#### ShaderVariantCollection
+
+https://docs.unity3d.com/Manual/shader-variant-collections.html
+
+### 预编译指令
+
+#### keyword 关键字
 
   - 使用 multi_compile 或 shader_feature 预编译指令来声明keyword，编译产生Shader的变体（variant）
   - 在脚本里用Material.EnableKeyword或Shader.EnableKeyword来控制运行时具体使用变体A还是变体B；
@@ -81,7 +98,7 @@ return fixed4(0,0,0,1);
 return fixed4(0,0,0,1);
   ```
 
-  ##### 动态设置keyword关键字
+##### C#脚本动态设置keyword关键字
 
   ``` csharp
 // 局部：对特定Material设置关键字
@@ -102,10 +119,14 @@ Shader.EnableKeyword
 CommandBuffer.EnableShaderKeyword
   ```
 
-  参考：[让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
-
-  ##### 与#define 和 [Toggle]_Condition("condition", Float) = 1 的区别
+##### 与#define 和 [Toggle]_Condition("condition", Float) = 1 的区别
 
   - 动态地设置关键字，相当于动态地设置了宏，即```if (condidionA)#define A```，而这个条件可以外部传入动态设置，#define最多只能做到```#if B #define C```而已，条件没法动态改变
   - 虽然属性面板上使用```[Toggle]_Specular_Workflow("Specular Workflow", Float) = 0```，就可以使用```if(_Specular)```来分支，但宏可以动态地决定哪些代码被编译，比如符合条件时才定义某些变量。if则无法做到，不论是否符合条件都必须声明某个“所有条件下都共用的变量”，再用所谓的条件去分支。况且也无法应对“条件A下变量A表示A意义，条件B下则表示B意义，代码执行逻辑不变”的情况
   - ``` #if A ```等同于```#if defined(A)```
+
+### 参考
+
+-   [让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
+-   https://docs.unity3d.com/Manual/shader-variants-and-keywords.html
+

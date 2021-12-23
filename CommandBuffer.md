@@ -2,7 +2,7 @@
 
 ### 使用
 
--   添加命令到该命令缓冲区：调用实例方法如、BeginSample等，添加对应的指令到该CommanderBuffer实例的渲染命令List中（不是立即执行）
+-   添加命令到该命令缓冲区：调用实例方法如BeginSample等，添加对应的指令到该CommanderBuffer实例的渲染命令List中（不是立即执行）
     -   设置全局变量：如SetGlobalVectorArray等，效果等同于Shader.SetGlobalVectorArray
     -   RenderTexture：GetTemporaryRT、Blit等
 -   [执行该缓冲区的所有命令](#执行时机)
