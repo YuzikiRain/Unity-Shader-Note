@@ -1,3 +1,10 @@
+直接在shader中使用分支，而不是变体
+
+-   条件是静态不变的：那么编译器会优化并生成仅执行某个分支的代码
+-   动态条件：编译器不优化，两条分支都可能执行，（“if-else”语句的编译方式通常是每次都执行两个分支，然后使用条件移动指令选择正确的结果，而没有任何分支 from Michal_ (https://forum.unity.com/members/michal_.751202/) https://forum.unity.com/threads/about-branching-and-min-max.498266/）
+
+尽量用变体而不是分支
+
 ### shader变体
 
 #### 优化
