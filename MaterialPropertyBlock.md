@@ -53,3 +53,7 @@ UNITY_INSTANCING_BUFFER_END(Props)
 这样一来即使使用MaterialPropertyBlock也不会中断合批了
 
 参考：https://docs.unity3d.com/Manual/GPUInstancing.html
+
+### MaterialPropertyBlock不适用于SRP
+
+使用SRP而不是built-in管线时，如果有需要修改材质属性的需求，不能用MaterialPropertyBlock，而是直接通过 `GetComponent<MeshRenderer>().material.SetFloat("_Cutoff", 0.555f);`来修改材质实例，虽然会生成多个材质实例，但是SRP Batcher会能对这些材质进行合批处理
