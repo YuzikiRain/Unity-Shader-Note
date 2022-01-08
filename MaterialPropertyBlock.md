@@ -35,3 +35,21 @@ void Start()
 
 #### GPU Instancing
 
+MaterialPropertyBlock会中断可能的静态或动态合批，但是好处是如果使用了相同的MaterialPropertyBlock的材质仍可以合批，除非开启GPU Instancing
+而MaterialPropertyBlock原本就是为了GPU Instancing存在的
+
+默认情况下，Unity 仅在每个实例化绘制调用中批处理具有不同[变换](https://docs.unity3d.com/Manual/class-Transform.html)的 GameObjects实例。要为您的实例化游戏对象添加更多变化，请修改您的着色器以添加每个实例的属性，例如材质颜色。
+
+请注意，在正常情况下（不使用实例着色器，或者`_Color`不是每个实例的属性），由于 MaterialPropertyBlock 中的值不同，绘制调用批处理会中断
+
+为了避免该情况，可以开启GPU Instancing，将需要实例化的属性比如`_Color`添加到实例化属性中
+
+``` glsl
+UNITY_INSTANCING_BUFFER_START(Props)
+    UNITY_DEFINE_INSTANCED_PROP(fixed4, _Color)
+UNITY_INSTANCING_BUFFER_END(Props)
+```
+
+这样一来即使使用MaterialPropertyBlock也不会中断合批了
+
+参考：https://docs.unity3d.com/Manual/GPUInstancing.html

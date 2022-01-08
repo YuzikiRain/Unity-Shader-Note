@@ -97,6 +97,7 @@ Shader "SimplestInstancedShader"
 -   使用多个实例属性时，您无需将所有属性都填写在`MaterialPropertyBlocks`
 -   应用优先级：SRP Batcher > Static Batch > GPU Instancing > Dynamic Batch
 -   不支持Skin Mesh Renderer
+-   如果多通道着色器有两个以上通道，则只能实例化第一个通道。这是因为 Unity 会强制为每个对象一起渲染后面的通道，从而强制更改材质。
 
 ### 参考
 
