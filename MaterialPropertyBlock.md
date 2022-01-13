@@ -35,10 +35,9 @@ void Start()
 
 #### GPU Instancing
 
-MaterialPropertyBlock会中断可能的静态或动态合批，但是好处是如果使用了相同的MaterialPropertyBlock的材质仍可以合批，除非开启GPU Instancing
-而MaterialPropertyBlock原本就是为了GPU Instancing存在的
+使用MaterialPropertyBlock而不是直接修改material的属性，这样不会隐式地创建新的material实例（**但不会减少DrawCall，每个sharedMaterial一个DrawCall**）。而MaterialPropertyBlock原本就是为了GPU Instancing存在的
 
-默认情况下，Unity 仅在每个实例化绘制调用中批处理具有不同[变换](https://docs.unity3d.com/Manual/class-Transform.html)的 GameObjects实例。要为您的实例化游戏对象添加更多变化，请修改您的着色器以添加每个实例的属性，例如材质颜色。
+默认情况下，Unity 仅在每个实例化绘制调用中批处理具有不同Transform[变换](https://docs.unity3d.com/Manual/class-Transform.html)的 GameObjects实例。要为您的实例化游戏对象添加更多变化，请修改您的着色器以添加每个实例的属性，例如材质颜色。
 
 请注意，在正常情况下（不使用实例着色器，或者`_Color`不是每个实例的属性），由于 MaterialPropertyBlock 中的值不同，绘制调用批处理会中断
 
@@ -50,10 +49,13 @@ UNITY_INSTANCING_BUFFER_START(Props)
 UNITY_INSTANCING_BUFFER_END(Props)
 ```
 
-这样一来即使使用MaterialPropertyBlock也不会中断合批了
+这样一来使用MaterialPropertyBlock可以达到修改材质属性的目的而且也不会中断合批
 
 参考：https://docs.unity3d.com/Manual/GPUInstancing.html
 
 ### MaterialPropertyBlock不适用于SRP
 
 使用SRP而不是built-in管线时，如果有需要修改材质属性的需求，不能用MaterialPropertyBlock，而是直接通过 `GetComponent<MeshRenderer>().material.SetFloat("_Cutoff", 0.555f);`来修改材质实例，虽然会生成多个材质实例，但是SRP Batcher会能对这些材质进行合批处理
+**`MaterialPropertyBlock` + `GPU Instacning`的效率优于`SRP Batcher`**
+
+https://www.ronja-tutorials.com/post/048-material-property-blocks/

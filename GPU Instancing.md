@@ -90,12 +90,17 @@ Shader "SimplestInstancedShader"
 | `UNITY_TRANSFER_INSTANCE_ID(v, o);`                          | 使用它可以将实例 ID 从输入结构复制到顶点着色器中的输出结构。仅当您需要访问片段着色器中的每个实例数据时才需要这样做。 | `#define UNITY_TRANSFER_INSTANCE_ID(input, output)   output.instanceID = UNITY_GET_INSTANCE_ID(input)` |
 | `UNITY_ACCESS_INSTANCED_PROP(arrayName, var)`                | 使用它来访问在实例化常量缓冲区中声明的每个实例的 Shader 属性。它使用实例 ID 索引到实例数据数组中。该`arrayName`宏必须在一个匹配`UNITY_INSTANCING_BUFFER_END(name)`宏。 | `#define UNITY_ACCESS_INSTANCED_PROP(arr, var)   arr##Array[unity_InstanceID].var` |
 
+### MaterialPropertyBlocks
 
+- 不适用MaterialPropertyBlocks时，也可以对使用了同一材质（sharedMaterial）的物体进行实例化，比如大量的物体都使用了一个相同的sharedMaterial，那么只有一个DrawCall（如果没超过限制的话）
+    参考：https://programmer.help/blogs/simple-understanding-of-gpu-instancing.html
+- 如果想要在使用了相同的sharedMaterial的基础上，再为每个物体应用不同的材质属性，那么只能使用MaterialPropertyBlocks
 
 ### 其他说明
 
 -   使用多个实例属性时，您无需将所有属性都填写在`MaterialPropertyBlocks`
--   应用优先级：SRP Batcher > Static Batch > GPU Instancing > Dynamic Batch
+-   如果一个实例缺少该属性，Unity 会从引用的材质中获取默认值。如果材质没有指定属性的默认值，Unity 会将值设置为 0。不要将非实例化属性放在 中`MaterialPropertyBlock`，因为这会禁用实例化。相反，为它们创建不同的材质。
+-   **应用优先级：SRP Batcher > Static Batch > GPU Instancing > Dynamic Batch**
 -   不支持Skin Mesh Renderer
 -   如果多通道着色器有两个以上通道，则只能实例化第一个通道。这是因为 Unity 会强制为每个对象一起渲染后面的通道，从而强制更改材质。
 
