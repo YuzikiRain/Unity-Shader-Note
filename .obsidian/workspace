@@ -1,0 +1,96 @@
+{
+  "main": {
+    "id": "ba02d4a922d1f032",
+    "type": "split",
+    "children": [
+      {
+        "id": "306902fd6cfa675f",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Lightmap 光照贴图.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "cc4a69a8fe761b84",
+    "type": "split",
+    "children": [
+      {
+        "id": "3381ab840fcf92fc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cb8b3ec40685eeb5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "4f8299fdeb688ff7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1aa577a8add1e897",
+    "type": "split",
+    "children": [
+      {
+        "id": "1a66352277e8e59c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1333215e336fe562",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Lightmap 光照贴图.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "306902fd6cfa675f",
+  "lastOpenFiles": [
+    "Lightmap 光照贴图.md",
+    "CommandBuffer.md",
+    "depth 深度.md"
+  ]
+}
