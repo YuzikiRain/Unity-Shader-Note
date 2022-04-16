@@ -4,8 +4,8 @@
 
 如果需要，Unity 项目可以使用两种技术将烘焙的光强度范围编码为低动态范围纹理：
 
-- **RGBM 编码**。RGBM 编码在 **RGB** 通道中存储颜色，在 Alpha 通道中存储乘数 （**M**）。RGBM光照贴图的范围在线性空间中从0到34.49（52.2），在伽马空间中从0到5。
-- **双低动态范围 （dLDR） 编码**。dLDR编码在移动平台上使用，只需将[0，2]的范围映射到[0，1]。高于值 2 的烘焙光强度将被clamp。解码值的计算方法是，使用伽玛空间时将光照贴图纹理中的值乘以 2，使用线性空间时乘以 4.59482（22.2）。某些平台将光照贴图存储为 dLDR，因为它们的硬件压缩在使用 RGBM 时会产生外观不佳的伪影。
+- **RGBM 编码**。RGBM 编码在 **RGB** 通道中存储颜色，在 Alpha 通道中存储乘数 （**M**）。RGBM光照贴图的范围在线性空间中从0到34.49（5^2.2），在伽马空间中从0到5。
+- **双低动态范围 （dLDR） 编码**。dLDR编码在移动平台上使用，只需将[0，2]的范围映射到[0，1]。高于值 2 的烘焙光强度将被clamp。解码值的计算方法是，使用伽玛空间时将光照贴图纹理中的值乘以 2，使用线性空间时乘以 4.59482（2^2.2）。某些平台将光照贴图存储为 dLDR，因为它们的硬件压缩在使用 RGBM 时会产生外观不佳的伪影。
 
 使用线性色彩空间时，光照贴图纹理将标记为 sRGB，最终值由**着色**（采样和解码后）将在线性色彩空间中。使用 Gamma 色彩空间时，最终值将位于 Gamma 色彩空间中。
 
@@ -60,7 +60,7 @@ inline half3 DecodeLightmap( fixed4 color, half4 decodeInstructions)
 
 #### UNITY_LIGHTMAP_DLDR_ENCODING
 
-```text
+```glsl
 // Decodes doubleLDR encoded lightmaps.
 inline half3 DecodeLightmapDoubleLDR( fixed4 color, half4 decodeInstructions)
 {
@@ -80,7 +80,7 @@ inline half3 DecodeLightmapDoubleLDR( fixed4 color, half4 decodeInstructions)
 
 **需要光照贴图的a分量**
 
-```text
+```glsl
 // Decodes HDR textures
 // handles dLDR, RGBM formats
 // Called by DecodeLightmap when UNITY_NO_RGBM is not defined.
