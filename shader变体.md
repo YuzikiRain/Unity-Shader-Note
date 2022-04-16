@@ -59,7 +59,7 @@ https://docs.unity3d.com/Manual/shader-variant-collections.html
   - 把这个Shader加入“always included shaders”中 (Project Settings -> Graphic)；
   - 创造一个使用变体B的Material，强行说明变体B有用；
 
-  ##### __ 双下划线
+##### __ 双下划线
 
   ``` hlsl
 #pragma multi_compile __ A
@@ -134,6 +134,7 @@ CommandBuffer.EnableShaderKeyword
 
 ### 参考
 
+-   [Unity - 手册：分支、变体和关键字 (unity3d.com)](https://docs.unity3d.com/Manual/shader-variants-and-keywords.html)
 -   [让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
 -   https://docs.unity3d.com/Manual/shader-variants-and-keywords.html
 
