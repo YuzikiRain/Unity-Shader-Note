@@ -136,5 +136,4 @@ CommandBuffer.EnableShaderKeyword
 
 -   [Unity - 手册：分支、变体和关键字 (unity3d.com)](https://docs.unity3d.com/Manual/shader-variants-and-keywords.html)
 -   [让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
--   https://docs.unity3d.com/Manual/shader-variants-and-keywords.html
 
