@@ -6,6 +6,7 @@
 var block = new MaterialPropertyBlock();
 var renderer = GetComponent<Renderer>();
 block.SetColor("_Color", baseColor);
+// 每次修改MaterialPropertyBlock后，需要再次对renderer调用SetPropertyBlock才会生效
 renderer.SetPropertyBlock(block);
 ```
 
@@ -13,6 +14,10 @@ renderer.SetPropertyBlock(block);
 
 ```csharp
 renderer.SetPropertyBlock();
+// 或者
+meshRenderer.GetPropertyBlock(mpb);
+mpb.Clear();
+meshRenderer.SetPropertyBlock(mpb);
 ```
 
 ### 优化
