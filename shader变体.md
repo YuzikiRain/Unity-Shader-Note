@@ -3,9 +3,7 @@
 -   条件是静态不变的：那么编译器会优化并生成仅执行某个分支的代码
 -   动态条件：编译器不优化，两条分支都可能执行，（“if-else”语句的编译方式通常是每次都执行两个分支，然后使用条件移动指令选择正确的结果，而没有任何分支 from Michal_ (https://forum.unity.com/members/michal_.751202/) https://forum.unity.com/threads/about-branching-and-min-max.498266/）
 
-尽量用变体而不是分支
-
-### shader变体
+## shader变体
 
 #### 优化
 
@@ -18,11 +16,13 @@
 
 https://docs.unity3d.com/cn/2019.4/Manual/OptimizingShaderLoadTime.html
 
-#### ShaderVariantCollection
+#### ShaderVariantCollection 着色器变体集合
 
 https://docs.unity3d.com/Manual/shader-variant-collections.html
 
-### 预编译指令
+用于预热变体
+
+## 预编译指令
 
 #### keyword 关键字
 
@@ -132,7 +132,9 @@ CommandBuffer.EnableShaderKeyword
   - 虽然属性面板上使用```[Toggle]_Specular_Workflow("Specular Workflow", Float) = 0```，就可以使用```if(_Specular)```来分支，但宏可以动态地决定哪些代码被编译，比如符合条件时才定义某些变量。if则无法做到，不论是否符合条件都必须声明某个“所有条件下都共用的变量”，再用所谓的条件去分支。况且也无法应对“条件A下变量A表示A意义，条件B下则表示B意义，代码执行逻辑不变”的情况
   - ``` #if A ```等同于```#if defined(A)```
 
-### 参考
+## 着色器预热
+
+## 参考
 
 -   [Unity - 手册：分支、变体和关键字 (unity3d.com)](https://docs.unity3d.com/Manual/shader-variants-and-keywords.html)
 -   [让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
