@@ -1,3 +1,17 @@
+## Property Inspector
+
+``` glsl
+Properties {
+    _MySliderValue("This is a Slider",Range(0,10)) = 2.5
+    _MyColorValue("This is a Color",Color) = (1,1,1,1)
+    _My2DValue("This is a 2D",2D) = "white"{}
+    _MyRectValue("This is a Rect",Rect) = "white"{}
+    _MyCubeValue("This is a Cube",Cube) = ""{}
+    _MyFloatValue("This is a Float",Float) = 2.5
+    _MyVectorValue("This is a Vector",Vector) = (1,2,3,4)
+}
+```
+
 ## MaterialPropertyDrawer
 
 ### Toggle
