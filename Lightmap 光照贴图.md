@@ -159,7 +159,7 @@ inline half3 DecodeLightmapRGBM (half4 data, half4 decodeInstructions)
 杭-偶尔不帅 14:12:25
 因为摆放决定动态物体阴影的 lightprobe 烘焙太慢 摆放的维护太麻烦
 
-![image-20220118150827762](https://cdn.jsdelivr.net/gh/YuzikiRain/ImageBed/img/image-20220118150827762.png)
+![image-20220118150827762](https://fastly.jsdelivr.net/gh/YuzikiRain/ImageBed/img/image-20220118150827762.png)
 
 远处(50米)的阴影 就算优化到这么高精度静态shadowmap 效果也不好吧? 每200米 4096
 
