@@ -27,3 +27,9 @@
 请注意，当前平台或 GPU 可能不支持特定的渲染纹理格式。使用 [SystemInfo.SupportsRenderTextureFormat](https://docs.unity3d.com/ScriptReference/SystemInfo.SupportsRenderTextureFormat.html) 在使用前进行检查。
 
 参考：[Unity - Scripting API: RenderTextureFormat (unity3d.com)](https://docs.unity3d.com/ScriptReference/RenderTextureFormat.html)
+
+## FrameBuffer
+
+
+
+参考：[Unity3d中渲染到RenderTexture的原理，几种方式以及一些问题_leonwei的博客-CSDN博客_unity的rendertexture](https://blog.csdn.net/leonwei/article/details/54972653)
