@@ -1,16 +1,31 @@
-直接在shader中使用分支，而不是变体
+## 静态分支
 
--   条件是静态不变的：那么编译器会优化并生成仅执行某个分支的代码
--   动态条件：编译器不优化，两条分支都可能执行，（“if-else”语句的编译方式通常是每次都执行两个分支，然后使用条件移动指令选择正确的结果，而没有任何分支 from Michal_ (https://forum.unity.com/members/michal_.751202/) https://forum.unity.com/threads/about-branching-and-min-max.498266/）
+着色器编译器在编译时（使用预处理器常量和宏）计算条件代码，永远只会执行其中一个分支
+
+## 动态分支
+
+两条分支都可能执行
+
+动态分支可能着色器在 GPU 上的运行速度会更慢，尤其是在满足以下任一条件的情况下：
+
+- 着色器在功能较差的 GPU 上运行。
+- 条件代码具有“非对称分支”，其中一个分支的代码比另一个分支长或更复杂。
+
+一些观点：
+
+（“if-else”语句的编译方式通常是每次都执行两个分支，然后使用条件移动指令选择正确的结果，而没有任何分支 from Michal_ (https://forum.unity.com/members/michal_.751202/) https://forum.unity.com/threads/about-branching-and-min-max.498266/）
 
 ## shader变体
+
+使用关键字定义，Unity 将为着色器代码分支的每个可能组合（包括构建中材质未使用的组合）构建着色器变体。这意味着您可以在运行时启用和禁用关键字，但它也可能大大增加构建时间、文件大小、加载时间和内存使用量。
 
 #### 优化
 
 -   构建时剥离
+-   将常用的shader添加到ProjectSettings->Graphics->Preloaded Shaders
+    Preloaded Shaders 列表列出的是常用着色器。此处列出的着色器变体将在应用程序的整个生命周期内加载到内存中。
 -   着色器变体集合
-    -   添加到ProjectSettings->Graphics->Preloaded Shaders
-        Preloaded Shaders 列表列出的是常用着色器。此处列出的着色器变体将在应用程序的整个生命周期内加载到内存中。对于包含大量变体的 ShaderVariantCollections 资源，这可能会占用大量内存。为避免这种情况，应以较小的粒度创建 ShaderVariantCollection 资源并从脚本进行加载。
+    -   对于包含大量变体的 ShaderVariantCollections 资源，这可能会占用大量内存。为避免这种情况，应以较小的粒度创建 ShaderVariantCollection 资源并从脚本进行加载。
     -   （按场景需求）手动加载
         为每个场景记录使用过的着色器变体，将它们保存到单独的 ShaderVariantCollections 资源中，并在场景启动时加载它们。
 
@@ -18,13 +33,11 @@ https://docs.unity3d.com/cn/2019.4/Manual/OptimizingShaderLoadTime.html
 
 #### ShaderVariantCollection 着色器变体集合
 
-https://docs.unity3d.com/Manual/shader-variant-collections.html
-
 用于预热变体
 
-## 预编译指令
+https://docs.unity3d.com/Manual/shader-variant-collections.html
 
-#### keyword 关键字
+## keyword 关键字
 
   - 使用 multi_compile 或 shader_feature 预编译指令来声明keyword，编译产生Shader的变体（variant）
   - 在脚本里用Material.EnableKeyword或Shader.EnableKeyword来控制运行时具体使用变体A还是变体B；
@@ -136,6 +149,9 @@ CommandBuffer.EnableShaderKeyword
 
 ## 参考
 
+-   [Unity - Manual: Declaring and using shader keywords in HLSL (unity3d.com)](https://docs.unity3d.com/Manual/SL-MultipleProgramVariants.html)
+-   [Unity - Manual: Branching in shaders (unity3d.com)](https://docs.unity3d.com/Manual/shader-branching.html)
+-   [Unity - Manual: Conditionals in shaders (unity3d.com)](https://docs.unity3d.com/Manual/shader-conditionals.html)
 -   [Unity - 手册：分支、变体和关键字 (unity3d.com)](https://docs.unity3d.com/Manual/shader-variants-and-keywords.html)
 -   [让我们好好聊聊Unity Shader中的multi_complie 李成蹊 知乎](https://zhuanlan.zhihu.com/p/77043332)
 
