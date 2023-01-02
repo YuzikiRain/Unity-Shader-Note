@@ -1,5 +1,7 @@
 ## 1.使用Camera渲染表示深度的纹理
 
+**这一步主要是以光源方向来渲染深度纹理，为了简便，创建了和光源方向相同的相机并设置为正交模式（对应平行光），使用相机的变换和视锥体来创建vp矩阵而不需要手动创建。**
+
 创建用于显示物体的默认Camera，命名为MainCamera。
 
 创建用于绘制ShadowMap的Camera（命名为lightCamera）和DirectionalLight，两者的位置、旋转一直保持一致。
@@ -34,6 +36,7 @@ public class ShdowTest : MonoBehaviour
     {
         Matrix4x4 vp = GL.GetGPUProjectionMatrix(m_renderCam.projectionMatrix, false) * m_renderCam.worldToCameraMatrix;
         Matrix4x4 sm = new Matrix4x4();
+        // 设置矩阵的缩放和平移，其他保持默认值0
         sm.m00 = 0.5f;
         sm.m11 = 0.5f;
         sm.m22 = 0.5f;
@@ -42,7 +45,9 @@ public class ShdowTest : MonoBehaviour
         sm.m13 = 0.5f;
         sm.m23 = 0.5f;
 
+        // 把顶点从世界空间变换到光源（而不是相机的）的裁剪空间的vp矩阵
         Shader.SetGlobalMatrix("_lightVPMatrix", vp);
+        // 将范围从[-1,1]映射到[0,1]的变换矩阵
         Shader.SetGlobalMatrix("_ZeroOneMatrix", sm);
     }
 }
@@ -83,7 +88,7 @@ Shader "Hidden/ShadowMap"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // SV_POSITION会自动进行透视除法
+                // SV_POSITION会自动进行透视除法，这里的positionCS.z就是深度值
                 float depth = i.positionCS.z;
                 // 将深度存储到4个分量中，可存储的精度更高
                 fixed4 color = EncodeFloatRGBA(depth);
@@ -120,6 +125,7 @@ float4 _MainTex_ST;
 sampler2D _depthTexture;
 //变换到灯光摄像机的 vp矩阵 从外部传入
 float4x4  _lightVPMatrix;
+// 将范围从[-1,1]映射到[0,1]
 float4x4  _smMatrix;
 
 v2f vert (appdata v)
@@ -127,7 +133,7 @@ v2f vert (appdata v)
     v2f o;
     o.positionCameraCS = UnityObjectToClipPos(v.positionOS);
     o.uv = TRANSFORM_TEX(v.uv,_MainTex);
-    //把顶点变换到光源的裁剪空间
+    //把顶点从世界空间变换到光源（而不是相机的）的裁剪空间
     o.positionLightCS = mul(_lightVPMatrix, mul(unity_ObjectToWorld,v.positionOS));
     return o;
 }
@@ -148,7 +154,7 @@ fixed4 frag(v2f i) : SV_Target
     fixed4 col = tex2D(_MainTex, i.uv);
     //对深度图在屏幕空间下进行采样
     fixed4 dcol = tex2D(_depthTexture, i.positionLightCS.xy);
-    //把取得的值进行解码，获取深度图时的EncodeFloatRGBA
+    //把取得的值进行解码，获取深度图时EncodeFloatRGBA前的值
     // shadowmap：近平面为1，远平面为0
     float depthInDepthTexture = DecodeFloatRGBA(dcol);
 
