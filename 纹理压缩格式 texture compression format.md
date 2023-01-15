@@ -5,8 +5,8 @@
 | 压缩格式 | 渲染后端               | 备注                                                         | 机型                                                         |
 | :------- | ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ASTC     | OpenGL ES 3.1 / Vulkan | 大部分机型都支持                                             | Qualcomm GPUs since Adreno 4xx / Snapdragon 415 (2015)<br />ARM GPUs since Mali T624 (2012)<br />NVIDIA GPUs since Tegra K1 (2014)<br />PowerVR GPUs since GX6250 (2014) |
-| **ETC2** | OpenGL ES 3.0 / Vulkan | **推荐**，2022年几乎所有安卓设备都支持了，因此不必再考虑ETC  |                                                              |
-| ETC      | OpenGL ES 2            | 不推荐，仅支持RGB，而A通道信息需要额外贴图来保存，因此需要特殊的shader进行支持（采样2张纹理） |                                                              |
+| **ETC2** | OpenGL ES 3.0 / Vulkan | **推荐**，2022年几乎所有安卓设备都支持了，因此不必再考虑ETC  | Android 4.3（API 级别 18）及更高版本<br />IOS7以上版本       |
+| ETC      | OpenGL ES 2.0          | 不推荐，仅支持RGB，而A通道信息需要额外贴图来保存，因此需要特殊的shader进行支持（采样2张纹理） | Android 2.2（API 级别 8）及更高版本                          |
 
 对于HDR纹理，ASTC HDR是唯一支持的压缩格式。
 
