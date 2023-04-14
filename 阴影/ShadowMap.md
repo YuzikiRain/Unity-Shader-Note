@@ -8,7 +8,7 @@
 
 设置lightCamera的TargetTexture为指定RenderTexture（变量名为shadowRenderTexture），设置cullingmask为需要投射阴影的物体layer。
 
-**注意！由于我们直接将NDC坐标的z分量作为深度，近平面为1，原平面为0，因此需要设置shadowRenderTexture的颜色从默认的纯白色改为纯黑色**（表示无穷远，即还未有任何在DirectionalLight的裁剪范围内的物体投影到shadowRenderTexture上），可以将lightCamera的ClearFlags改为SolidColor，BackgroundColor改为Color.black。如果不设置为纯黑色，则该RenderTexture会表示投影的地方有一定深度（投影物体提供），其他地方有最小深度（像是已经有物体在近平面上的）
+**注意！由于我们直接将NDC坐标的z分量作为深度，近平面为1，远平面为0，因此需要设置shadowRenderTexture的颜色从默认的纯白色改为纯黑色**（表示无穷远，即还未有任何在DirectionalLight的裁剪范围内的物体投影到shadowRenderTexture上），可以将lightCamera的ClearFlags改为SolidColor，BackgroundColor改为Color.black。如果不设置为纯黑色，则该RenderTexture会表示投影的地方有一定深度（投影物体提供），其他地方有最小深度（像是已经有物体在近平面上的）
 
 调用`camera.RenderWithShader(shader, "RenderType");`使用特定的shader来渲染相机（通过cullingmask等筛选后的）物体到**shadowRenderTexture**上。
 
@@ -154,12 +154,12 @@ fixed4 frag(v2f i) : SV_Target
     fixed4 col = tex2D(_MainTex, i.uv);
     //对深度图在屏幕空间下进行采样
     fixed4 dcol = tex2D(_depthTexture, i.positionLightCS.xy);
-    //把取得的值进行解码，获取深度图时EncodeFloatRGBA前的值
+    //把取得的值进行解码，获取深度图EncodeFloatRGBA前的值
     // shadowmap：近平面为1，远平面为0
     float depthInDepthTexture = DecodeFloatRGBA(dcol);
 
-    //深度值大于深度图中采样的值，说明在阴影中，对颜色进行处理
-    if (depthInDepthTexture > depthLightSpace)
+    //深度值小于深度图中采样的值，说明在阴影中，对颜色进行处理
+    if (depthLightSpace < depthInDepthTexture)
     {
         col = float4(0.5, 0.5, 0.5, 1);
     }
