@@ -147,6 +147,10 @@ CommandBuffer.EnableShaderKeyword
 
 ## 着色器预热
 
+## 关键字筛选
+
+[Unity - Scripting API: FilterAttribute (unity3d.com)](https://docs.unity3d.com/ScriptReference/ShaderKeywordFilter.FilterAttribute.html)
+
 ## 参考
 
 -   [Unity - Manual: Declaring and using shader keywords in HLSL (unity3d.com)](https://docs.unity3d.com/Manual/SL-MultipleProgramVariants.html)
