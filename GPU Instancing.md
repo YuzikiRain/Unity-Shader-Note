@@ -132,7 +132,7 @@ Shader "Example/ParticleGPUInstancing"
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
                 
-UNITY_INSTANCING_BUFFER_START(MyProps)
+			UNITY_INSTANCING_BUFFER_START(MyProps)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
             UNITY_INSTANCING_BUFFER_END(MyProps)
 
@@ -185,9 +185,10 @@ UNITY_INSTANCING_BUFFER_START(MyProps)
 
 ### MaterialPropertyBlocks
 
-- 不适用MaterialPropertyBlocks时，也可以对使用了同一材质（sharedMaterial）的物体进行实例化，比如大量的物体都使用了一个相同的sharedMaterial，那么只有一个DrawCall（如果没超过限制的话）
+- 不适用MaterialPropertyBlock时，也可以对使用了同一材质（sharedMaterial）的物体进行实例化，比如大量的物体都使用了一个相同的sharedMaterial，那么只有一个DrawCall（如果没超过限制的话）
     参考：https://programmer.help/blogs/simple-understanding-of-gpu-instancing.html
-- 如果想要在使用了相同的sharedMaterial的基础上，再为每个物体应用不同的材质属性，那么只能使用MaterialPropertyBlocks
+- 如果想要在使用了相同的sharedMaterial的基础上，再为每个物体应用不同的材质属性，那么只能使用MaterialPropertyBlock
+- **不支持SpriteRenderer**：因为使用SpriteRenderer的默认材质，则无法选择开启GPU Instancing；如果使用了自定义材质支持GPU Instancing，则在FrameDebugger中会提示”Non-instanced properties set for instanced shader”。
 
 ### 其他说明
 
