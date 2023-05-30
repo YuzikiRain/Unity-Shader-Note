@@ -5,6 +5,9 @@
 ```csharp
 var block = new MaterialPropertyBlock();
 var renderer = GetComponent<Renderer>();
+// 将renderer上的mpb复制给block
+// 如果要在保持mpb之前的值的基础上再做修改，就需要这么做
+renderer.GetPropertyBlock(block);
 block.SetColor("_Color", baseColor);
 // 每次修改MaterialPropertyBlock后，需要再次对renderer调用SetPropertyBlock才会生效
 renderer.SetPropertyBlock(block);

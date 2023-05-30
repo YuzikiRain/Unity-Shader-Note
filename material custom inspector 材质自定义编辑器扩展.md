@@ -100,7 +100,8 @@ Shader "Custom/Example"
     {
         _MainTex("Base (RGB)", 2D) = "white" {}        // Display a popup with None,Add,Multiply choices,
         // and setup corresponding shader keywords.
-        [KeywordEnum(None, Add, Multiply)] _Overlay("Overlay mode", Float) = 0        _OverlayTex("Overlay", 2D) = "black" {}        // Display as a toggle.
+        [KeywordEnum(None, Add, Multiply)] _Overlay("Overlay mode", Float) = 0       		 
+        _OverlayTex("Overlay", 2D) = "black" {}        // Display as a toggle.
         [Toggle] _Invert("Invert color?", Float) = 0
     }    // rest of shader code...
 }
