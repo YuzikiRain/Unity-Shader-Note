@@ -4,7 +4,7 @@ GPU Instancing通过一次为具有相同网格的多个对象发出单个绘制
 
 ### 如何开启
 
-使用相同的mesh和material，对于
+使用**相同的mesh和material**，对于
 
 -   一般物体：需要material使用支持了GPU Instancing的shader（如Standard shader），或者自定义支持GPU Instancing的shader
 -   动态绘制物体的mesh：使用调用[Graphics.DrawMeshInstanced](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)和[Graphics.DrawMeshInstancedIndirect](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)从脚本执行 GPU 实例化
@@ -132,9 +132,9 @@ Shader "Example/ParticleGPUInstancing"
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
                 
-			UNITY_INSTANCING_BUFFER_START(MyProps)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
-            UNITY_INSTANCING_BUFFER_END(MyProps)
+			UNITY_INSTANCING_BUFFER_START(InstanceProperties)
+                UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+            UNITY_INSTANCING_BUFFER_END(InstanceProperties)
 
             // 此宏将 _MainTex 声明为 Texture2D 对象。
             TEXTURE2D(_MainTex);
@@ -149,8 +149,6 @@ Shader "Example/ParticleGPUInstancing"
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                // TRANSFORM_TEX 宏执行平铺和偏移
-                // 变换。
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 return OUT;
             }
@@ -158,10 +156,9 @@ Shader "Example/ParticleGPUInstancing"
             half4 frag(Varyings IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                // SAMPLE_TEXTURE2D 宏使用给定的采样器对纹理进行
-                // 采样。
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                return color;
+                half4 tintColor = UNITY_ACCESS_INSTANCED_PROP(InstanceProperties, _Color);
+                return color * tintColor;
             }
             ENDHLSL
         }
